@@ -3,18 +3,28 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
+import java.util.Calendar;
+
 import fr.spoonless.javaee.entities.Individu;
 
 public class App {
   public static void main(String[] args) {
 
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("individu-unit"); // Va intérroger persistence.xml <persistence-unit name="individu-unit">
+    // Va intérroger persistence.xml <persistence-unit name="individu-unit"> pour créer une connexion à la db
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("individu-unit");
 
     EntityManager entityManager = emf.createEntityManager();
 
     Individu individu = new Individu();
     individu.setPrenom("Mohand");
     individu.setNom("Tazerout");
+    individu.setAge(32);
+
+    individu.setDateCreation(Calendar.getInstance());
+    
+    Calendar creationDate = Calendar.getInstance();
+    creationDate.set(1972, 11, 12);
+    individu.setDateDeNaissance(creationDate);
 
     try {
       entityManager.getTransaction().begin();
