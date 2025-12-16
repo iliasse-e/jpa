@@ -34,7 +34,7 @@ public class Individu {
 }
 ```
 
-Il existe un grand nombre d’annotations JPA servant à préciser comment la correspondance doit être faite entre le modèle objet et le modèle relationnel de base de données. Il est possible de déclarer cette correspondance à l’aide du fichier XML `orm.xml`. Cependant, la plupart de développeurs préfèrent utiliser des annotations.
+*Il existe un grand nombre d’annotations JPA servant à préciser comment la correspondance doit être faite entre le modèle objet et le modèle relationnel de base de données. Il est possible de déclarer cette correspondance à l’aide du fichier `orm.xml`. Cependant, la plupart de développeurs préfèrent utiliser des annotations.*
 
 [Pour accéder à une liste d'annotations JPA](https://gayerie.dev/docs/jakartaee/javaee_orm/jpa_entites.html#id1)
 
@@ -76,9 +76,12 @@ Il faut fournir à l’implémentation de JPA un fichier XML de déploiement nom
 </persistence>
 ```
 
-On va ajouter `<class>fr.spoonless.javaee.entities.Individu</class>` dans le fichier.
+On va ajouter dans le fichier :
+```xml
+<class>fr.spoonless.javaee.entities.Individu</class>
+```
 
-*Le fichier persistence.xml doit se situer dans le répertoire META-INF et être disponible dans le classpath à l’exécution. Dans un projet Maven, il suffit de créer ce fichier dans le répertoire src/main/resources/META-INF du projet (créez les répertoires manquants si nécessaire).*
+*Le fichier `persistence.xml` doit se situer dans le répertoire META-INF et être disponible dans le classpath à l’exécution. Dans un projet Maven, il suffit de créer ce fichier dans le répertoire src/main/resources/META-INF du projet (créez les répertoires manquants si nécessaire).*
 
 Pour obtenir une instance de `EntityManager`, il faut utiliser la classe `Persistence`. Grâce à cette classe, nous allons pouvoir créer une instance de `EntityManagerFactory`. Cette dernière, comme son nom l’indique, permet de fabriquer une instance de `EntityManager`.
 
@@ -102,7 +105,9 @@ A partir de `EntityManager` on va pouvoir manipuler les instances (ajouter, modi
 
 ## Lancer l'application
 
-`mvn clean package`
+```powershell
+mvn clean package
+```
 
 Executer le JAR : 
 ```powershell
