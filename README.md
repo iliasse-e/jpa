@@ -76,7 +76,7 @@ Il faut fournir à l’implémentation de JPA un fichier XML de déploiement nom
 </persistence>
 ```
 
-On va ajouter dans le fichier :
+On va ajouter notre nouvelle classe Individu dans le fichier afin de le déclarer comme unité de persistence :
 ```xml
 <class>fr.spoonless.javaee.entities.Individu</class>
 ```
