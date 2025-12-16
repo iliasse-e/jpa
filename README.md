@@ -195,3 +195,11 @@ Individu individu = entityManager.createNamedQuery("findIndividuByNom", Individu
                                  .setParameter("nom", "David Gayerie")
                                  .getSingleResult();
 ```
+
+## Les relations JPA
+
+https://gayerie.dev/docs/jakartaee/javaee_orm/jpa_relations.html
+
+## Héritage
+
+https://gayerie.dev/docs/jakartaee/javaee_orm/jpa_inheritance.html
