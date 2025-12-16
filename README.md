@@ -116,3 +116,82 @@ mvn exec:java "-Dexec.mainClass=fr.spoonless.javaee.App"
 
 `Persistence.createEntityManagerFactory` va intérroger le fichier `persistence.xml` pour se connecter à la DB, ajouter la table si inexistante et executer le script de App.
 
+## Les requêtes JPA
+
+Les méthodes `find`, `persist`, etc que fournit le `EntityManager` sont pas très élaborées.
+
+Heureusement, un `EntityManager` fournit également différentes API pour exécuter des requêtes. Le principe est toujours le même :
+
+
+### Les requêtes natives
+
+
+1. On créé un objet typé grâce à l'API.
+
+```java
+List<Individu> individus = null;
+individus = entityManager.createNativeQuery("select * from individu", Individu.class)
+                         .getResultList();
+```
+
+2. Pour les requêtes paramétrées, on donne la valeur des paramètres dans la méthode `setParameter` du builder.
+
+```java
+int ageMax = 25;
+List<Individu> individus = null;
+individus = entityManager
+              .createNativeQuery("select * from individu where age <= ?", Individu.class)
+              .setParameter(1, ageMax)
+              .getResultList();
+```
+
+3. On exécute la requête grâce aux méthodes `executeUpdate()` (pour un update ou un delete), `getSingleResult()` (pour une requête SELECT ne retournant qu’un seul résultat) ou `getResultList()` (pour une requête SELECT retournant une liste de résultats).
+
+### JPQL
+Avec JPA, il est possible d’utiliser un autre langage pour l’écriture des requêtes, il s’agit du JPA Query Language (JPQL). Ce langage est un langage de requête objet. L’objectif n’est plus d’écrire des requêtes basées sur le modèle relationnel des tables mais sur le modèle objet des classes Java.
+
+```java
+long individuId = 1;
+// Cette requête nécessite une transaction active
+entityManager.createQuery("delete from Individu i where i.id = :id")
+             .setParameter("id", individuId)
+             .executeUpdate();
+```
+
+[Plus de documentation](https://en.wikibooks.org/wiki/Java_Persistence/JPQL)
+
+### Les requêtes nommées
+
+L’utilisation de requêtes peut rendre l’application difficile à comprendre et à faire évoluer.
+
+Une requête nommée permet d’associer un identifiant de requête à une requête JPQL. On utilise pour cela l’annotation `@NamedQuery` que l’on peut placer sur la classe de l’entité pour centraliser toutes les requêtes relatives à cette entité.
+
+```java
+@Entity
+@NamedQuery(name="findIndividuByNom", query="select i from Individu i where i.nom = :nom")
+public class Individu {
+  // ...
+}
+```
+
+*Et pour plusieurs @NamedQueries*
+
+```java
+@Entity
+@NamedQueries({
+  @NamedQuery(name="findIndividuByNom", query="select i from Individu i where i.nom = :nom"),
+  @NamedQuery(name="deleteIndividuByNom", query="delete from Individu i where i.nom = :nom"),
+  @NamedQuery(name="deleteAllIndividus", query="delete from Individu i")
+})
+public class Individu {
+  // ...
+}
+```
+
+Utilisation d'une requête nommée :
+
+```java
+Individu individu = entityManager.createNamedQuery("findIndividuByNom", Individu.class)
+                                 .setParameter("nom", "David Gayerie")
+                                 .getSingleResult();
+```
